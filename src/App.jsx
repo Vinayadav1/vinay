@@ -7,7 +7,7 @@ import Lenis from "lenis";
 const ThreeBackground = lazy(() => import("./ThreeBackground.jsx"));
 const BlackHoleEngine = lazy(() => import("./BlackHoleEngine.jsx"));
 
-const siteUrl = "https://vinay-yadav.dev";
+const siteUrl = "https://vinayadavbca.netlify.app";
 
 const whatsappUrl =
   "https://api.whatsapp.com/send?text=Hi%20Vinay%2C%20I%20want%20to%20hire%20you%20for%20a%20web%20development%20project.";

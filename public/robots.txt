@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://vinay-yadav.dev/sitemap.xml
+Sitemap: https://vinayadavbca.netlify.app/sitemap.xml
