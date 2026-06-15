@@ -1,0 +1,18 @@
+{
+  "name": "Vinay Yadav Portfolio",
+  "short_name": "Vinay",
+  "description": "Full Stack Developer portfolio for Vinay Yadav, focused on React, Node.js and MERN web applications.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0a14",
+  "theme_color": "#ff124f",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
