@@ -5854,6 +5854,54 @@ footer::after {
     border-block: 1px solid rgba(255, 18, 79, 0.1);
   }
 
+  .mobile-singularity {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, #02030a 0 32%, rgba(255, 18, 79, 0.52) 34% 36%, rgba(255, 128, 30, 0.36) 42%, transparent 62%),
+      conic-gradient(from 24deg, transparent, rgba(255, 128, 30, 0.84), rgba(255, 18, 79, 0.72), rgba(55, 215, 255, 0.38), transparent 68%);
+    box-shadow:
+      0 0 32px rgba(255, 18, 79, 0.34),
+      0 0 70px rgba(255, 128, 30, 0.16);
+    transform: translate(-50%, -50%);
+  }
+
+  .mobile-singularity::before {
+    position: absolute;
+    inset: 32%;
+    border-radius: 50%;
+    background: radial-gradient(circle, #000 0 54%, rgba(0, 0, 0, 0.72) 72%, transparent);
+    content: "";
+    box-shadow: inset 0 0 24px #000;
+  }
+
+  .mobile-singularity i {
+    position: absolute;
+    inset: 48% -26%;
+    height: 1px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255, 128, 30, 0.92), rgba(255, 18, 79, 0.76), transparent);
+    transform: rotate(var(--ring-rotate, 0deg));
+    box-shadow: 0 0 14px rgba(255, 18, 79, 0.5);
+  }
+
+  .mobile-singularity i:nth-child(1) {
+    --ring-rotate: -10deg;
+  }
+
+  .mobile-singularity i:nth-child(2) {
+    --ring-rotate: 12deg;
+    opacity: 0.72;
+  }
+
+  .mobile-singularity i:nth-child(3) {
+    --ring-rotate: 28deg;
+    opacity: 0.44;
+  }
+
   .mobile-black-hole-stage .black-hole-engine {
     left: 50%;
     width: 100vw;
@@ -6262,6 +6310,71 @@ footer::after {
     margin-left: -0.72rem;
     padding-right: 0.72rem;
     padding-left: 0.72rem;
+  }
+}
+
+@media (max-width: 700px), (pointer: coarse) {
+  html,
+  body,
+  html.native-scroll,
+  html.native-scroll body {
+    scroll-behavior: auto !important;
+    overscroll-behavior-y: auto;
+  }
+
+  .immersive-bg,
+  .wind-layer {
+    display: none !important;
+  }
+
+  :where(h1, h2, h3, p, .eyebrow, .hero-role, .hero-stats span, .footer-links a),
+  :where(.laptop, .projects-laptop, .tech-image-frame, .feature-card, .cert-card, .timeline-note, .capability-card, .browser-mockup),
+  :where(.scene-image, .projects-image, .about-image, .side-shot img) {
+    transform: none !important;
+    translate: none !important;
+    rotate: none !important;
+    will-change: auto;
+  }
+
+  .mobile-snap-row,
+  .project-stats-row,
+  .project-case-list {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-behavior: auto;
+    scroll-snap-type: x proximity;
+    touch-action: pan-x pan-y;
+  }
+
+  .mobile-setup-card,
+  .mobile-showcase-card,
+  .mobile-service-card,
+  .mobile-price-card,
+  .mobile-project-card,
+  .mobile-experience-stack article,
+  .mobile-achievement-grid article,
+  .mobile-final-cta,
+  .inquiry-panel,
+  .modal-backdrop {
+    backdrop-filter: none;
+  }
+
+  .mobile-singularity,
+  .mobile-orbit-badge,
+  .tech-marquee-track,
+  .animated-grid,
+  .neon-line,
+  .timeline-dot,
+  .experience-timeline::after {
+    animation: none !important;
+  }
+
+  .mobile-hero-section::before,
+  .mobile-final-cta::before,
+  .project-page::before,
+  .offers-section::before,
+  .upgrade::before {
+    filter: none;
   }
 }
 

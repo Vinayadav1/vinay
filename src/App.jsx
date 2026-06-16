@@ -14,18 +14,52 @@ const whatsappUrl =
 
 gsap.registerPlugin(ScrollTrigger);
 
-function SmoothScroll() {
+function usePerformanceMobile() {
+  const getIsMobile = () =>
+    typeof window !== "undefined" &&
+    (window.matchMedia("(max-width: 700px)").matches || window.matchMedia("(pointer: coarse)").matches);
+
+  const [isMobile, setIsMobile] = useState(getIsMobile);
+
   useEffect(() => {
+    const widthQuery = window.matchMedia("(max-width: 700px)");
+    const pointerQuery = window.matchMedia("(pointer: coarse)");
+    const update = () => setIsMobile(getIsMobile());
+
+    widthQuery.addEventListener("change", update);
+    pointerQuery.addEventListener("change", update);
+
+    return () => {
+      widthQuery.removeEventListener("change", update);
+      pointerQuery.removeEventListener("change", update);
+    };
+  }, []);
+
+  return isMobile;
+}
+
+function SmoothScroll() {
+  const isPerformanceMobile = usePerformanceMobile();
+
+  useEffect(() => {
+    if (isPerformanceMobile) {
+      document.documentElement.classList.add("native-scroll");
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      return () => document.documentElement.classList.remove("native-scroll");
+    }
+
+    document.documentElement.classList.remove("native-scroll");
+
     const lenis = new Lenis({
-      lerp: 0.115,
+      lerp: 0.08,
       smoothWheel: true,
       syncTouch: false,
-      wheelMultiplier: 0.88,
-      touchMultiplier: 1.05,
+      wheelMultiplier: 1.18,
+      touchMultiplier: 1,
       gestureOrientation: "vertical",
       anchors: {
         offset: -20,
-        duration: 1.15,
+        duration: 0.75,
       },
       easing: (value) => Math.min(1, 1.001 - Math.pow(2, -10 * value)),
     });
@@ -44,20 +78,24 @@ function SmoothScroll() {
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
-  }, []);
+  }, [isPerformanceMobile]);
 
   return null;
 }
 
 function AmbientBackground() {
+  const isPerformanceMobile = usePerformanceMobile();
+
   return (
     <div className="immersive-bg" aria-hidden="true">
       <div className="animated-grid" />
       <div className="neon-line line-a" />
       <div className="neon-line line-b" />
-      <Suspense fallback={null}>
-        <ThreeBackground />
-      </Suspense>
+      {!isPerformanceMobile && (
+        <Suspense fallback={null}>
+          <ThreeBackground />
+        </Suspense>
+      )}
     </div>
   );
 }
@@ -128,11 +166,14 @@ function LoadingScreen() {
 }
 
 function WindEnvironment() {
+  const isPerformanceMobile = usePerformanceMobile();
   const [footballs, setFootballs] = useState([]);
   const lastSpawnRef = useRef(0);
   const footballIdRef = useRef(0);
 
   useEffect(() => {
+    if (isPerformanceMobile) return undefined;
+
     let frameId = 0;
     let lastY = window.scrollY;
     let lastTime = performance.now();
@@ -226,7 +267,9 @@ function WindEnvironment() {
 
     frameId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frameId);
-  }, []);
+  }, [isPerformanceMobile]);
+
+  if (isPerformanceMobile) return null;
 
   return (
     <div className="wind-layer" aria-hidden="true">
@@ -270,7 +313,11 @@ function WindEnvironment() {
 }
 
 function InteractionEffects() {
+  const isPerformanceMobile = usePerformanceMobile();
+
   useEffect(() => {
+    if (isPerformanceMobile) return undefined;
+
     const onMove = (event) => {
       const px = event.clientX / window.innerWidth - 0.5;
       const py = event.clientY / window.innerHeight - 0.5;
@@ -285,9 +332,11 @@ function InteractionEffects() {
 
     window.addEventListener("pointermove", onMove, { passive: true });
     return () => window.removeEventListener("pointermove", onMove);
-  }, []);
+  }, [isPerformanceMobile]);
 
   useEffect(() => {
+    if (isPerformanceMobile) return undefined;
+
     const magneticTargets = document.querySelectorAll(
       "button, .whatsapp-button, .ghost-button, .capability-card, .solution-card, .cert-card",
     );
@@ -317,9 +366,11 @@ function InteractionEffects() {
     });
 
     return () => cleanups.forEach((cleanup) => cleanup());
-  }, []);
+  }, [isPerformanceMobile]);
 
   useEffect(() => {
+    if (isPerformanceMobile) return undefined;
+
     const contexts = gsap.context(() => {
       gsap.utils.toArray(".split-section, .projects-showcase, .project-page, .capability-block, .offers-section, .cinematic, .cards-section, .quick-section, .upgrade").forEach((section) => {
         gsap.fromTo(
@@ -369,7 +420,7 @@ function InteractionEffects() {
     });
 
     return () => contexts.revert();
-  }, []);
+  }, [isPerformanceMobile]);
 
   return null;
 }
@@ -1225,9 +1276,11 @@ function MobileHomeExperience({ openInquiry }) {
 
       <section className="mobile-black-hole-section" aria-label="Capability transition">
         <div className="mobile-black-hole-stage">
-          <Suspense fallback={<div className="black-hole-engine" />}>
-            <BlackHoleEngine />
-          </Suspense>
+          <div className="mobile-singularity" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </div>
           <span className="mobile-orbit-badge badge-one">API</span>
           <span className="mobile-orbit-badge badge-two">UI</span>
           <span className="mobile-orbit-badge badge-three">DB</span>
@@ -1503,6 +1556,7 @@ function InquiryModal({ isOpen, onClose }) {
 function App() {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const [pathname, setPathname] = useState(() => window.location.pathname);
+  const isPerformanceMobile = usePerformanceMobile();
   const openInquiry = () => setIsInquiryOpen(true);
   const closeInquiry = () => setIsInquiryOpen(false);
   const isProjectsRoute = pathname === "/projects";
@@ -1555,9 +1609,10 @@ function App() {
       <main id="top">
         {isProjectsRoute ? (
           <ProjectPage openInquiry={openInquiry} />
+        ) : isPerformanceMobile ? (
+          <MobileHomeExperience openInquiry={openInquiry} />
         ) : (
           <>
-        <MobileHomeExperience openInquiry={openInquiry} />
         <div className="desktop-home-flow">
         <section className="hero immersive-hero">
           <div className="hero-glow" />
