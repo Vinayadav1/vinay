@@ -438,6 +438,19 @@ const techStackItems = [
   { name: "Kiro", icon: "K" },
 ];
 
+const techStackRows = [
+  techStackItems.slice(0, 5),
+  techStackItems.slice(5, 10),
+  techStackItems.slice(10),
+];
+
+const mobileSkillGroups = [
+  { title: "Frontend", skills: ["React.js", "JavaScript", "Tailwind CSS", "Responsive Design"] },
+  { title: "Backend", skills: ["Node.js", "Express.js", "REST APIs"] },
+  { title: "Database", skills: ["MongoDB", "MySQL", "SQL"] },
+  { title: "Tools", skills: ["Git & GitHub", "Cursor AI", "ChatGPT", "GitHub Copilot", "Kiro"] },
+];
+
 const buildItems = [
   {
     name: "Business Websites",
@@ -561,6 +574,12 @@ const projectCaseStudies = [
     layout: "visual-left",
   },
 ];
+
+const mobileProjectImpacts = {
+  DoctorSite: "Patient inquiry flow for clinics",
+  Snapsule: "Student-first social platform UX",
+  "The Gynecomastia Clinic": "SEO-led clinic lead generation",
+};
 
 const offerHighlights = [
   { title: "Fast Delivery", text: "On-time, every time", icon: "FAST" },
@@ -807,16 +826,29 @@ function CapabilityPanel() {
       <div className="capability-block">
         <div className="ecosystem-lines" aria-hidden="true" />
         <p className="eyebrow">TECH STACK</p>
-        <div className="capability-grid tech-grid">
-          {techStackItems.map((item) => (
-            <article className="capability-card" key={item.name}>
-              {item.icon.startsWith("http") ? (
-                <img src={item.icon} alt="" aria-hidden="true" />
-              ) : (
-                <span>{item.icon}</span>
-              )}
-              <strong>{item.name}</strong>
-            </article>
+        <div className="tech-marquee" aria-label="Technology stack">
+          {techStackRows.map((row, rowIndex) => (
+            <div
+              className={`tech-marquee-row tech-marquee-row-${rowIndex % 2 === 0 ? "ltr" : "rtl"}`}
+              key={`tech-row-${rowIndex}`}
+            >
+              <div className="tech-marquee-track">
+                {[0, 1].map((copyIndex) => (
+                  <div className="tech-marquee-set" aria-hidden={copyIndex === 1} key={`tech-copy-${copyIndex}`}>
+                    {row.map((item) => (
+                      <article className="capability-card tech-marquee-card" key={`${copyIndex}-${item.name}`}>
+                        {item.icon.startsWith("http") ? (
+                          <img src={item.icon} alt="" aria-hidden="true" />
+                        ) : (
+                          <span>{item.icon}</span>
+                        )}
+                        <strong>{item.name}</strong>
+                      </article>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -1123,6 +1155,203 @@ function OffersSection({ openInquiry }) {
   );
 }
 
+function MobileHomeExperience({ openInquiry }) {
+  return (
+    <div className="mobile-home-experience">
+      <section className="mobile-hero-section">
+        <p className="mobile-kicker">MERN STACK DEVELOPER</p>
+        <strong className="mobile-hero-name">VINAY YADAV</strong>
+        <h1>Building scalable web apps for fast-moving brands.</h1>
+        <div className="mobile-hero-actions">
+          <button type="button" onClick={openInquiry}>Book Call</button>
+          <a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp</a>
+        </div>
+        <div className="mobile-setup-card">
+          <img src="/hero.png" alt="Dark cyberpunk coding setup" />
+          <span>React. Node. MongoDB. Launch-ready.</span>
+        </div>
+      </section>
+
+      <section className="mobile-story-section">
+        <p className="mobile-kicker">ABOUT</p>
+        <h2>I turn rough ideas into polished digital products.</h2>
+        <p>
+          I help startups and businesses ship fast, responsive web apps with clean interfaces, reliable backend logic and scalable databases.
+        </p>
+        <div className="mobile-showcase-card">
+          <img src="/about.png" alt="Code workspace showcase" />
+          <div>
+            <span>PRODUCT THINKING</span>
+            <strong>Design, build and launch from one focused workflow.</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="mobile-swipe-section" id="mobile-services">
+        <div className="mobile-section-heading">
+          <p className="mobile-kicker">SERVICES</p>
+          <h2>Choose the system your business needs next.</h2>
+        </div>
+        <div className="mobile-snap-row">
+          {buildItems.map((item) => (
+            <article className="mobile-service-card" key={item.name}>
+              <span>{item.icon}</span>
+              <h3>{item.name}</h3>
+              <p>{item.text}</p>
+              <button type="button" onClick={openInquiry}>Discuss Project</button>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mobile-tech-section">
+        <div className="mobile-section-heading">
+          <p className="mobile-kicker">TECH STACK</p>
+          <h2>Compact, modern and production-ready.</h2>
+        </div>
+        <div className="mobile-skill-accordion">
+          {mobileSkillGroups.map((group, index) => (
+            <details open={index === 0} key={group.title}>
+              <summary>{group.title}<span>{group.skills.length} tools</span></summary>
+              <div>
+                {group.skills.map((skill) => (
+                  <b key={skill}>{skill}</b>
+                ))}
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section className="mobile-black-hole-section" aria-label="Capability transition">
+        <div className="mobile-black-hole-stage">
+          <Suspense fallback={<div className="black-hole-engine" />}>
+            <BlackHoleEngine />
+          </Suspense>
+          <span className="mobile-orbit-badge badge-one">API</span>
+          <span className="mobile-orbit-badge badge-two">UI</span>
+          <span className="mobile-orbit-badge badge-three">DB</span>
+        </div>
+        <p>From concept to launch, every layer connects into one focused product system.</p>
+      </section>
+
+      <section className="mobile-swipe-section" id="mobile-offers">
+        <div className="mobile-section-heading">
+          <p className="mobile-kicker">OFFERS</p>
+          <h2>Simple packages. Premium execution.</h2>
+        </div>
+        <div className="mobile-snap-row mobile-pricing-row">
+          {offerPlans.map((plan, index) => (
+            <article className={`mobile-price-card ${index === 1 ? "recommended" : ""}`} key={plan.title}>
+              {index === 1 && <span className="mobile-plan-tag">Recommended</span>}
+              <small>{plan.icon}</small>
+              <h3>{plan.title}</h3>
+              <p>{plan.subtitle}</p>
+              <strong>{plan.price}</strong>
+              <ul>
+                {plan.features.slice(0, 4).map((feature) => (
+                  <li key={feature}>{feature}</li>
+                ))}
+              </ul>
+              <button type="button" onClick={openInquiry}>Start Project</button>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mobile-process-section">
+        <div className="mobile-section-heading">
+          <p className="mobile-kicker">PROCESS</p>
+          <h2>Clear flow. No confusion.</h2>
+        </div>
+        <div className="mobile-neon-timeline">
+          {["Discover", "Design", "Develop", "Deliver"].map((step, index) => (
+            <article key={step}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <h3>{step}</h3>
+                <p>{offerProcess[index]?.text.replace("I ", "").replace("We ", "")}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mobile-swipe-section" id="mobile-projects">
+        <div className="mobile-section-heading">
+          <p className="mobile-kicker">PROJECTS</p>
+          <h2>Product showcases built around outcomes.</h2>
+        </div>
+        <div className="mobile-snap-row mobile-project-row">
+          {projectCaseStudies.map((project) => (
+            <article className="mobile-project-card" key={project.title}>
+              <div className="mobile-project-image">
+                <img src="/projects.png" alt={`${project.title} product showcase`} />
+              </div>
+              <span>{project.category}</span>
+              <h3>{project.title}</h3>
+              <p>{mobileProjectImpacts[project.title]}</p>
+              <div>
+                {project.tech.slice(0, 3).map((tech) => (
+                  <b key={tech}>{tech}</b>
+                ))}
+              </div>
+              <a href="/projects">View Project</a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mobile-experience-section">
+        <div className="mobile-section-heading">
+          <p className="mobile-kicker">EXPERIENCE</p>
+          <h2>Execution across operations and software.</h2>
+        </div>
+        <div className="mobile-experience-stack">
+          {featureCards.slice(0, 3).map((item) => (
+            <article key={item.title}>
+              <span>{item.icon}</span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mobile-education-section">
+        <div className="mobile-section-heading">
+          <p className="mobile-kicker">EDUCATION</p>
+          <h2>Foundations that support the build.</h2>
+        </div>
+        <div className="mobile-achievement-grid">
+          <article>
+            <span>BCA</span>
+            <strong>Chandigarh University</strong>
+            <p>CGPA 7.2</p>
+          </article>
+          <article>
+            <span>5+</span>
+            <strong>Certifications</strong>
+            <p>React, Node and web development.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="mobile-final-cta">
+        <p className="mobile-kicker">LET'S BUILD</p>
+        <h2>Ready to Build Something Amazing?</h2>
+        <p>Tell me what you want to launch. I will help shape it into a fast, premium web experience.</p>
+        <div>
+          <a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp</a>
+          <button type="button" onClick={openInquiry}>Book Call</button>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 function ExperienceTimeline() {
   return (
     <div className="experience-timeline">
@@ -1328,6 +1557,8 @@ function App() {
           <ProjectPage openInquiry={openInquiry} />
         ) : (
           <>
+        <MobileHomeExperience openInquiry={openInquiry} />
+        <div className="desktop-home-flow">
         <section className="hero immersive-hero">
           <div className="hero-glow" />
           <div className="hero-copy">
@@ -1494,6 +1725,7 @@ function App() {
             </a>
           </div>
         </motion.section>
+        </div>
           </>
         )}
       </main>
@@ -1503,6 +1735,11 @@ function App() {
           <span className="brand-mark">V</span>
           <strong>VINAY</strong>
           <p>Vinay Yadav is a MERN Stack Developer focused on building scalable web applications, modern user experiences and efficient backend systems.</p>
+          <div className="footer-socials" aria-label="Social and contact links">
+            <a href="https://github.com/Vinayadav1/vinay" target="_blank" rel="noreferrer">GitHub</a>
+            <a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp</a>
+            <a href="mailto:vinaysalempur45@gmail.com">Email</a>
+          </div>
         </div>
         <div className="footer-links">
           {footerLinks.map((group) => (
