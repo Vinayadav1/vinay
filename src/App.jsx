@@ -1206,24 +1206,67 @@ function OffersSection({ openInquiry }) {
   );
 }
 
+const MOBILE_EASE = [0.22, 1, 0.36, 1];
+
+const mobileStaggerItem = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: MOBILE_EASE } },
+};
+
+function MobileReveal({ className, id, children }) {
+  return (
+    <motion.section
+      className={className}
+      id={id}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.55, ease: MOBILE_EASE }}
+    >
+      {children}
+    </motion.section>
+  );
+}
+
+function MobileCard({ className, children, delay = 0 }) {
+  return (
+    <motion.article
+      className={className}
+      initial={{ opacity: 0, y: 22, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-8%" }}
+      transition={{ duration: 0.45, delay, ease: MOBILE_EASE }}
+    >
+      {children}
+    </motion.article>
+  );
+}
+
 function MobileHomeExperience({ openInquiry }) {
   return (
     <div className="mobile-home-experience">
-      <section className="mobile-hero-section">
-        <p className="mobile-kicker">MERN STACK DEVELOPER</p>
-        <strong className="mobile-hero-name">VINAY YADAV</strong>
-        <h1>Building scalable web apps for fast-moving brands.</h1>
-        <div className="mobile-hero-actions">
+      <motion.section
+        className="mobile-hero-section"
+        initial="hidden"
+        animate="visible"
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
+      >
+        <motion.p className="mobile-kicker" variants={mobileStaggerItem}>MERN Stack Developer</motion.p>
+        <motion.h1 className="mobile-hero-name" variants={mobileStaggerItem}>Vinay Yadav</motion.h1>
+        <motion.p className="mobile-hero-tagline" variants={mobileStaggerItem}>
+          Building scalable web apps for fast-moving brands.
+        </motion.p>
+        <motion.div className="mobile-hero-actions" variants={mobileStaggerItem}>
           <button type="button" onClick={openInquiry}>Book Call</button>
           <a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp</a>
-        </div>
-        <div className="mobile-setup-card">
+        </motion.div>
+        <motion.div className="mobile-setup-card" variants={mobileStaggerItem}>
           <img src="/hero.png" alt="Dark cyberpunk coding setup" />
           <span>React. Node. MongoDB. Launch-ready.</span>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      <section className="mobile-story-section">
+      <MobileReveal className="mobile-story-section">
         <p className="mobile-kicker">ABOUT</p>
         <h2>I turn rough ideas into polished digital products.</h2>
         <p>
@@ -1236,26 +1279,26 @@ function MobileHomeExperience({ openInquiry }) {
             <strong>Design, build and launch from one focused workflow.</strong>
           </div>
         </div>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-swipe-section" id="mobile-services">
+      <MobileReveal className="mobile-swipe-section" id="mobile-services">
         <div className="mobile-section-heading">
           <p className="mobile-kicker">SERVICES</p>
           <h2>Choose the system your business needs next.</h2>
         </div>
         <div className="mobile-snap-row">
-          {buildItems.map((item) => (
-            <article className="mobile-service-card" key={item.name}>
+          {buildItems.map((item, index) => (
+            <MobileCard className="mobile-service-card" delay={index * 0.05} key={item.name}>
               <span>{item.icon}</span>
               <h3>{item.name}</h3>
               <p>{item.text}</p>
               <button type="button" onClick={openInquiry}>Discuss Project</button>
-            </article>
+            </MobileCard>
           ))}
         </div>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-tech-section">
+      <MobileReveal className="mobile-tech-section">
         <div className="mobile-section-heading">
           <p className="mobile-kicker">TECH STACK</p>
           <h2>Compact, modern and production-ready.</h2>
@@ -1272,9 +1315,9 @@ function MobileHomeExperience({ openInquiry }) {
             </details>
           ))}
         </div>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-black-hole-section" aria-label="Capability transition">
+      <MobileReveal className="mobile-black-hole-section" aria-label="Capability transition">
         <div className="mobile-black-hole-stage">
           <div className="mobile-singularity" aria-hidden="true">
             <i />
@@ -1286,16 +1329,16 @@ function MobileHomeExperience({ openInquiry }) {
           <span className="mobile-orbit-badge badge-three">DB</span>
         </div>
         <p>From concept to launch, every layer connects into one focused product system.</p>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-swipe-section" id="mobile-offers">
+      <MobileReveal className="mobile-swipe-section" id="mobile-offers">
         <div className="mobile-section-heading">
           <p className="mobile-kicker">OFFERS</p>
           <h2>Simple packages. Premium execution.</h2>
         </div>
         <div className="mobile-snap-row mobile-pricing-row">
           {offerPlans.map((plan, index) => (
-            <article className={`mobile-price-card ${index === 1 ? "recommended" : ""}`} key={plan.title}>
+            <MobileCard className={`mobile-price-card ${index === 1 ? "recommended" : ""}`} delay={index * 0.06} key={plan.title}>
               {index === 1 && <span className="mobile-plan-tag">Recommended</span>}
               <small>{plan.icon}</small>
               <h3>{plan.title}</h3>
@@ -1307,37 +1350,37 @@ function MobileHomeExperience({ openInquiry }) {
                 ))}
               </ul>
               <button type="button" onClick={openInquiry}>Start Project</button>
-            </article>
+            </MobileCard>
           ))}
         </div>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-process-section">
+      <MobileReveal className="mobile-process-section">
         <div className="mobile-section-heading">
           <p className="mobile-kicker">PROCESS</p>
           <h2>Clear flow. No confusion.</h2>
         </div>
         <div className="mobile-neon-timeline">
           {["Discover", "Design", "Develop", "Deliver"].map((step, index) => (
-            <article key={step}>
+            <MobileCard className="mobile-timeline-step" delay={index * 0.05} key={step}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
                 <h3>{step}</h3>
                 <p>{offerProcess[index]?.text.replace("I ", "").replace("We ", "")}</p>
               </div>
-            </article>
+            </MobileCard>
           ))}
         </div>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-swipe-section" id="mobile-projects">
+      <MobileReveal className="mobile-swipe-section" id="mobile-projects">
         <div className="mobile-section-heading">
           <p className="mobile-kicker">PROJECTS</p>
           <h2>Product showcases built around outcomes.</h2>
         </div>
         <div className="mobile-snap-row mobile-project-row">
-          {projectCaseStudies.map((project) => (
-            <article className="mobile-project-card" key={project.title}>
+          {projectCaseStudies.map((project, index) => (
+            <MobileCard className="mobile-project-card" delay={index * 0.05} key={project.title}>
               <div className="mobile-project-image">
                 <img src="/projects.png" alt={`${project.title} product showcase`} />
               </div>
@@ -1350,49 +1393,49 @@ function MobileHomeExperience({ openInquiry }) {
                 ))}
               </div>
               <a href="/projects">View Project</a>
-            </article>
+            </MobileCard>
           ))}
         </div>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-experience-section">
+      <MobileReveal className="mobile-experience-section">
         <div className="mobile-section-heading">
           <p className="mobile-kicker">EXPERIENCE</p>
           <h2>Execution across operations and software.</h2>
         </div>
         <div className="mobile-experience-stack">
-          {featureCards.slice(0, 3).map((item) => (
-            <article key={item.title}>
+          {featureCards.slice(0, 3).map((item, index) => (
+            <MobileCard className="mobile-experience-item" delay={index * 0.05} key={item.title}>
               <span>{item.icon}</span>
               <div>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </div>
-            </article>
+            </MobileCard>
           ))}
         </div>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-education-section">
+      <MobileReveal className="mobile-education-section">
         <div className="mobile-section-heading">
           <p className="mobile-kicker">EDUCATION</p>
           <h2>Foundations that support the build.</h2>
         </div>
         <div className="mobile-achievement-grid">
-          <article>
+          <MobileCard className="mobile-achievement-item" delay={0}>
             <span>BCA</span>
             <strong>Chandigarh University</strong>
             <p>CGPA 7.2</p>
-          </article>
-          <article>
+          </MobileCard>
+          <MobileCard className="mobile-achievement-item" delay={0.06}>
             <span>5+</span>
             <strong>Certifications</strong>
             <p>React, Node and web development.</p>
-          </article>
+          </MobileCard>
         </div>
-      </section>
+      </MobileReveal>
 
-      <section className="mobile-final-cta">
+      <MobileReveal className="mobile-final-cta">
         <p className="mobile-kicker">LET'S BUILD</p>
         <h2>Ready to Build Something Amazing?</h2>
         <p>Tell me what you want to launch. I will help shape it into a fast, premium web experience.</p>
@@ -1400,7 +1443,7 @@ function MobileHomeExperience({ openInquiry }) {
           <a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp</a>
           <button type="button" onClick={openInquiry}>Book Call</button>
         </div>
-      </section>
+      </MobileReveal>
     </div>
   );
 }
